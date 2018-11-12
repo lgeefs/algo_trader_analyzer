@@ -9,6 +9,9 @@ res_json = res.json()
 if len(res_json) < 1:
     exit
 
+print(res_json)
+exit
+
 with open('test.csv', 'w') as file:
     csv_file = csv.writer(file)
     csv_file.writerow(res_json[0].keys())
