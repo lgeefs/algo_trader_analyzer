@@ -44,15 +44,56 @@ class Technical(object):
     # get moving average convergence/divergence oscillator
     @staticmethod
     def get_macd(prices, fast, slow, signal):
-        #must turn to negative to slice array
-        fast = -fast
-        slow = -slow
-        fast_ema = Technical.get_ema(prices[fast:])
-        slow_ema = Technical.get_ema(prices[slow:])
-        macd = fast_ema - slow_ema
-        #once we get enough macd data, we can plot signal line (7 ema) against macd
-        return macd
+
+        if slow > len(prices):
+            print('idiot')
+            return
+
+        fast_emas = []
+        slow_emas = []
+        macds = []
+
+        # get macd for prices
+        for i in range(0,len(prices)-1-slow):
+            
+            fast_ema = Technical.get_ema(prices[i+(slow-fast):slow+i])
+            slow_ema = Technical.get_ema(prices[i:slow+i])
+            macd = fast_ema - slow_ema
+            #once we get enough macd data, we can plot signal line (7 ema) against macd
+            macds.append(macd)
+            # we still want to plot these lines on the chart so we'll return them
+            fast_emas.append(fast_ema)
+            slow_emas.append(slow_ema)
+        
+        signal_period = 7 # 7ema
+        signal_line = []
+
+        # get signal line for macd
+        for i in range(0, len(macds)-1-signal_period):
+            signal = Technical.get_ema(macds[i:signal_period+i])
+            signal_line.append(signal)
+
+        
+        return {
+            'fasts':fast_emas,
+            'slows':slow_emas,
+            'macds':macds,
+            'signal_line':signal_line
+        }
     
+    @staticmethod
+    def get_standard_devidation(prices):
+        return prices
+    
+    @staticmethod
+    def get_bollinger_bands(prices):
+        for p in prices:
+            print(p)
+
+    @staticmethod
+    def get_rsi(prices):
+        for p in prices:
+            print(p)
 
 
 

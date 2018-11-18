@@ -19,6 +19,3 @@ class Analyzer(object):
         print('Finished')
     
 
-a = Analyzer()
-a.setup('aapl')
-a.finish()
