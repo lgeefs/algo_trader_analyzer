@@ -55,7 +55,7 @@ class Technical(object):
         macds = []
 
         # get macd for prices
-        for i in range(0,len(prices)-1-slow):
+        for i in range(0,len(prices)-slow):
             
             fast_ema = Technical.get_ema(prices[i+(slow-fast):slow+i])
             slow_ema = Technical.get_ema(prices[i:slow+i])
@@ -70,7 +70,7 @@ class Technical(object):
         signal_line = []
 
         # get signal line for macd
-        for i in range(0, len(macds)-1-signal_period):
+        for i in range(0, len(macds)-signal_period):
             signal = Technical.get_ema(macds[i:signal_period+i])
             signal_line.append(signal)
 
@@ -100,12 +100,12 @@ class Technical(object):
 
         bands = []
         
-        for i in range(0, len(prices)-1-period):
+        for i in range(0, len(prices)-period):
             price_slices = prices[i:i+period]
-            middle_band = sma = Technical.get_sma(price_slices)
+            middle_band = Technical.get_sma(price_slices)
             gap = Technical.get_standard_deviation(price_slices) * 2
-            upper_band = sma + gap
-            lower_band = sma - gap
+            upper_band = middle_band + gap
+            lower_band = middle_band - gap
             bb = {
                 'price':prices[i+period],
                 'upper_band':upper_band,
@@ -118,12 +118,52 @@ class Technical(object):
 
     @staticmethod
     def get_rsi(prices):
-        period = len(prices)
+        period = 14
 
         price_changes = []
 
-        #for i in range(1, len(prices)-1-period):
-            #price_changes.append(Technical.get_price_change(prices[i, i-1))
+        for i in range(1, len(prices)):
+            price_changes.append(Technical.get_price_change(prices[i], prices[i-1]))
+        
+        gains = [0]
+        losses = [0]
+        avg_gains = []
+        avg_losses = []
+        rs_array = []
+        for i in range(0, len(price_changes)):
+
+            if price_changes[i] >= 0:
+                gains.append(prices[i])
+            else:
+                losses.append(prices[i])
+
+            if i >= period:
+                avg_gain = sum(gains[i-period:i]) / float(period)
+                avg_loss = sum(losses[i-period:i]) / float(period) 
+
+                avg_gains.append(avg_gain)
+                avg_losses.append(avg_loss)     
+
+                if i == period:
+                    rs_array.append(avg_gain / avg_loss)
+                else:
+                    prev_avg_gain = avg_gains[i-period-1]
+                    prev_avg_loss = avg_losses[i-period-1]
+                    rs = (((prev_avg_gain * 13) + avg_gain)/14) / (((prev_avg_loss * 13) + avg_loss)/14)
+                    rs_array.append(rs)
+
+        rsi_array = []
+        for rs in rs_array:
+            rsi = 100 - (100/(1+rs))
+            rsi_array.append(rsi)
+        
+        return {
+            'rsi':rsi_array,
+            'prices':prices[-len(rsi_array):]
+        }
+
+                
+
  
 
 

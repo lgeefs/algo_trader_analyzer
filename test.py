@@ -16,5 +16,6 @@ emas = Technical.get_ema(prices)
 macds = Technical.get_macd(prices, 10, 30, 7)
 std_dev = Technical.get_standard_deviation(prices)
 bbands = Technical.get_bollinger_bands(prices)
+rsi = Technical.get_rsi(prices)
 
-print(bbands)
+print(rsi)
