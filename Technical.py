@@ -31,13 +31,13 @@ class Technical(object):
     def get_ema(prices):
         period = len(prices)
         alpha = 2 / (period + 1)
-        emas = []
+        #emas = []
         ema = Technical.get_sma(prices)
         i = 0
         for p in prices:
             if i == period: break
             ema = ema + alpha * (p - ema)
-            emas.append(ema)
+            #emas.append(ema)
 
         return ema
 
@@ -82,13 +82,36 @@ class Technical(object):
         }
     
     @staticmethod
-    def get_standard_devidation(prices):
-        return prices
+    def get_standard_deviation(prices):
+        period = len(prices)
+        mean = sum(prices) / period
+        result = 0.00
+        for p in prices:
+            x = (p - mean) ** 2
+            result += x
+        return result
     
     @staticmethod
     def get_bollinger_bands(prices):
-        for p in prices:
-            print(p)
+        period = 20
+
+        bands = []
+        
+        for i in range(0, len(prices)-1-period):
+            price_slices = prices[i:i+period]
+            middle_band = sma = Technical.get_sma(price_slices)
+            gap = Technical.get_standard_deviation(price_slices) * 2
+            upper_band = sma + gap
+            lower_band = sma - gap
+            bb = {
+                'price':prices[i+period],
+                'upper_band':upper_band,
+                'middle_band':middle_band,
+                'lower_band':lower_band
+            }
+            bands.append(bb)
+        
+        return bands
 
     @staticmethod
     def get_rsi(prices):
