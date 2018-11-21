@@ -1,3 +1,4 @@
+import math
 import requests
 
 class Technical(object):
@@ -89,6 +90,8 @@ class Technical(object):
         for p in prices:
             x = (p - mean) ** 2
             result += x
+        result = result / float(period)
+        result = math.sqrt(result)
         return result
     
     @staticmethod
@@ -115,8 +118,13 @@ class Technical(object):
 
     @staticmethod
     def get_rsi(prices):
-        for p in prices:
-            print(p)
+        period = len(prices)
+
+        price_changes = []
+
+        #for i in range(1, len(prices)-1-period):
+            #price_changes.append(Technical.get_price_change(prices[i, i-1))
+ 
 
 
 
