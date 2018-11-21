@@ -11,7 +11,6 @@ prices = [
     12.87, 12.88, 12.01, 11.66, 11.70, 11.08, 10.88, 10.54, 10.77, 11.01
     ]
 
-#print(Technical.get_price_change(20, 25))
 smas = Technical.get_sma(prices)
 emas = Technical.get_ema(prices)
 macds = Technical.get_macd(prices, 10, 30, 7)

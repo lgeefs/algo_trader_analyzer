@@ -85,7 +85,7 @@ class Technical(object):
     @staticmethod
     def get_standard_deviation(prices):
         period = len(prices)
-        mean = sum(prices) / period
+        mean = sum(prices) / float(period)
         result = 0.00
         for p in prices:
             x = (p - mean) ** 2
