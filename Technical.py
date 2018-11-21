@@ -120,22 +120,24 @@ class Technical(object):
     def get_rsi(prices):
         period = 14
 
-        price_changes = []
+        price_changes = [0]
 
         for i in range(1, len(prices)):
-            price_changes.append(Technical.get_price_change(prices[i], prices[i-1]))
+            price_changes.append(prices[i] - prices[i-1])
         
-        gains = [0]
-        losses = [0]
+        gains = []
+        losses = []
         avg_gains = []
         avg_losses = []
         rs_array = []
         for i in range(0, len(price_changes)):
 
             if price_changes[i] >= 0:
-                gains.append(prices[i])
+                gains.append(price_changes[i])
+                losses.append(0)
             else:
-                losses.append(prices[i])
+                gains.append(0)
+                losses.append(abs(price_changes[i]))
 
             if i >= period:
                 avg_gain = sum(gains[i-period:i]) / float(period)
@@ -149,7 +151,7 @@ class Technical(object):
                 else:
                     prev_avg_gain = avg_gains[i-period-1]
                     prev_avg_loss = avg_losses[i-period-1]
-                    rs = (((prev_avg_gain * 13) + avg_gain)/14) / (((prev_avg_loss * 13) + avg_loss)/14)
+                    rs = (((prev_avg_gain * 13) + gains[i])/14) / (((prev_avg_loss * 13) + losses[i])/14)
                     rs_array.append(rs)
 
         rsi_array = []
