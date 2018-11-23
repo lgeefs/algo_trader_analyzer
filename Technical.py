@@ -22,9 +22,9 @@ class Technical(object):
         i = 0
         for p in prices:
             if i == period: break
-            total += float(p)
+            total += p
             i += 1
-        #return total / float(len(prices))
+        #return total / len(prices)
         return total / period
 
     # get exponential moving average
@@ -85,12 +85,12 @@ class Technical(object):
     @staticmethod
     def get_standard_deviation(prices):
         period = len(prices)
-        mean = sum(prices) / float(period)
+        mean = sum(prices) / period
         result = 0.00
         for p in prices:
             x = (p - mean) ** 2
             result += x
-        result = result / float(period)
+        result = result / period
         result = math.sqrt(result)
         return result
     
@@ -140,11 +140,11 @@ class Technical(object):
                 losses.append(abs(price_changes[i]))
 
             if i >= period:
-                avg_gain = sum(gains[i-period:i]) / float(period)
-                avg_loss = sum(losses[i-period:i]) / float(period) 
+                avg_gain = sum(gains[i-period:i]) / period
+                avg_loss = sum(losses[i-period:i]) / period
 
                 avg_gains.append(avg_gain)
-                avg_losses.append(avg_loss)     
+                avg_losses.append(avg_loss)
 
                 if i == period:
                     rs_array.append(avg_gain / avg_loss)
