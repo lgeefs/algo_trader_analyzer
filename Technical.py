@@ -340,11 +340,14 @@ class Technical(object):
 
         for i in range(0, len(dx) - 14):
             dx_ema = Technical.get_ema(dx[i:i+14])
-            dx_emas.append(dx_ema)
             if i > 0:
                 last_dx_ema = dx_emas[-1]
-                adx = last_dx_ema + ((2 / (i + 1)) * (dx[i] - last_dx_ema))
+                # idk which one is right lol
+                #adx = last_dx_ema + ((2 / (i + 1)) * (dx[i] - last_dx_ema))
+                adx = ((last_dx_ema * 13) + dx[i]) / 14
                 adxs.append(adx)
+
+            dx_emas.append(dx_ema)
 
         return {
             'plus_dm':plus_dm,
