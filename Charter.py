@@ -74,4 +74,27 @@ class Charter(object):
 
         plt.show()
 
-        #plt.savefig('/Applications/MAMP/htdocs/algo_trader_analyzer/'+symbol)
+    def plot_rsi(self, symbol, range):
+        
+        prices_resp = Technical.get_historical_prices(symbol)[-range:]
+        prices = [p['close'] for p in prices_resp]
+
+        rsi_resp = Technical.get_rsi(prices)
+        
+        rsi = rsi_resp['rsi']
+
+        rsi = np.array(rsi)
+
+        x = np.arange(0, len(rsi))
+        plt.plot(x, rsi, label='rsi')
+        
+        plt.xlabel('last '+str(range)+' days')
+        plt.ylabel('%')
+
+        plt.title("Plot of "+symbol)
+
+        plt.legend()
+
+        plt.savefig(symbol+' rsi.png')
+
+        plt.show()
