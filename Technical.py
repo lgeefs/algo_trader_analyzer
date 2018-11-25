@@ -66,13 +66,13 @@ class Technical(object):
             fast_emas.append(fast_ema)
             slow_emas.append(slow_ema)
         
-        signal_period = 7 # 7ema
+        
         signal_line = []
 
         # get signal line for macd
-        for i in range(0, len(macds)-signal_period):
-            signal = Technical.get_ema(macds[i:signal_period+i])
-            signal_line.append(signal)
+        for i in range(0, len(macds)-signal):
+            sig = Technical.get_ema(macds[i:signal+i])
+            signal_line.append(sig)
 
         
         return {
