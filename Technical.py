@@ -207,10 +207,151 @@ class Technical(object):
             'ccis':ccis
         }
 
+    @staticmethod
+    def get_ema_up(highs):
+
+        ups = []
+        up_emas = []
+        ema_range = 14
+
+        ema_ups = []
+
+        for i in range(1, len(highs)):
+            up = highs[i] - highs[i-1]
+            ups.append(up)
+            if i >= ema_range:
+                up_ema = Technical.get_ema(ups[i-ema_range:i])
+                up_emas.append(up_ema)
+
+            if i > ema_range:
+                n = i-ema_range-1
+                prev_up_ema = up_emas[n]
+                ema_up = prev_up_ema + ((2 / (n + 1)) * (up - prev_up_ema))
+                ema_ups.append(ema_up)
+
+        return ema_ups
+
+    @staticmethod
+    def get_ema_down(lows):
+
+        downs = []
+        down_emas = []
+        ema_range = 14
+
+        ema_downs = []
+
+        for i in range(1, len(lows)):
+            down = lows[i] - lows[i-1]
+            downs.append(down)
+            if i >= ema_range:
+                down_ema = Technical.get_ema(downs[i-ema_range:i])
+                down_emas.append(down_ema)
+
+            if i > ema_range:
+                n = i-ema_range-1
+                prev_down_ema = down_emas[n]
+                ema_down = prev_down_ema + ((2 / (n + 1)) * (down - prev_down_ema))
+                ema_downs.append(ema_down)
+
+        return ema_downs
+
+    @staticmethod
+    def get_ema_true_range(highs, lows):
+
+        trs = []
+        tr_emas = []
+        ema_range = 14
+
+        ema_trs = []
+
+        for i in range(1, len(lows)):
+            tr = highs[i] - lows[i]
+            trs.append(tr)
+            if i >= ema_range:
+                tr_ema = Technical.get_ema(trs[i-ema_range:i])
+                tr_emas.append(tr_ema)
+
+            if i > ema_range:
+                n = i-ema_range-1
+                prev_tr_ema = tr_emas[n]
+                ema_tr = prev_tr_ema + ((2 / (n + 1)) * (tr - prev_tr_ema))
+                ema_trs.append(ema_tr)
+
+        return ema_trs
+
+    @staticmethod
+    def get_plus_dm(ema_up, ema_tr):
+        up = np.array(ema_up)
+        tr = np.array(ema_tr)
+        plus_dm = up / tr
+        return plus_dm
+
+    @staticmethod
+    def get_minus_dm(ema_down, ema_tr):
+        down = np.array(ema_down)
+        tr = np.array(ema_tr)
+        minus_dm = down / tr
+        return minus_dm
+
+    @staticmethod
+    def get_directional_movement(plus_dm, minus_dm):
+        return abs(plus_dm - minus_dm) / (plus_dm + minus_dm)
+
+    ''' possible duplicate functionality
+    @staticmethod
+    def get_smooth_true_range(highs, lows):
+        
+        true_ranges = highs - lows
+
+        tr_period = 14
+        true_ranges_smooth = []
+
+        for i in range(0, len(true_ranges) - tr_period):
+            if i == tr_period:
+                tr14 = sum(true_ranges[i:i+tr_period])
+                true_ranges_smooth.append(tr14)
+            elif i > tr_period:
+                prior_tr14 = true_ranges_smooth[-1:]
+                current_tr = true_ranges[i+tr_period]
+                tr14 = prior_tr14 - (prior_tr14 / 14) + current_tr
+                true_ranges_smooth.append(tr14)
+
+        return {
+            'smooth_true_range':true_ranges_smooth
+        }
+    '''
 
     @staticmethod         
-    def get_adx(prices):
-        print(prices)
+    def get_adx(prices_resp):
+        highs = np.array([p['high'] for p in prices_resp])
+        lows = np.array([p['low'] for p in prices_resp])
+
+        ema_up = Technical.get_ema_up(highs)
+        ema_down = Technical.get_ema_down(lows)
+        ema_tr = Technical.get_ema_true_range(highs, lows)
+
+        plus_dm = Technical.get_plus_dm(ema_up, ema_tr)
+        minus_dm = Technical.get_minus_dm(ema_down, ema_tr)
+
+        dx = Technical.get_directional_movement(plus_dm, minus_dm)
+
+        dx_emas = []
+        adxs = []
+
+        for i in range(0, len(dx) - 14):
+            dx_ema = Technical.get_ema(dx[i:i+14])
+            dx_emas.append(dx_ema)
+            if i > 0:
+                last_dx_ema = dx_emas[-1]
+                adx = last_dx_ema + ((2 / (i + 1)) * (dx[i] - last_dx_ema))
+                adxs.append(adx)
+
+        return {
+            'plus_dm':plus_dm,
+            'minus_dm':minus_dm,
+            'adxs':adxs
+        }
+                
 
     @staticmethod         
     def get_ad(prices):

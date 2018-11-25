@@ -20,4 +20,4 @@ rsi = Technical.get_rsi(prices)
 
 prices = Technical.get_historical_prices('aapl')
 
-print(Technical.get_cci(prices))
+print(Technical.get_adx(prices))
