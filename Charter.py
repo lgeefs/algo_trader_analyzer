@@ -14,11 +14,13 @@ class Charter(object):
         slows = macd_resp['slows']
         macds = macd_resp['macds']
         signal_line = macd_resp['signal_line']
+        histograms = macd_resp['histograms']
 
         fasts = np.array(fasts)
         slows = np.array(slows)
         macds = np.array(macds)
         signal_line = np.array(signal_line)
+        histograms = np.array(histograms)
 
         x = np.arange(0, len(macds))
         #plt.plot(x, fasts, label='fast ema')
@@ -26,6 +28,7 @@ class Charter(object):
         plt.plot(x, macds, label='macd')
         x = np.arange(len(macds) - len(signal_line), len(macds))
         plt.plot(x, signal_line, label='signal')
+        plt.bar(x, histograms)
 
         plt.xlabel('last '+str(range)+' days')
         plt.ylabel('price')

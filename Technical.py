@@ -68,18 +68,21 @@ class Technical(object):
         
         
         signal_line = []
+        histograms = []
 
         # get signal line for macd
         for i in range(0, len(macds)-signal):
             sig = Technical.get_ema(macds[i:signal+i])
             signal_line.append(sig)
+            histograms.append(macds[i+signal]-sig)
 
         
         return {
             'fasts':fast_emas,
             'slows':slow_emas,
             'macds':macds,
-            'signal_line':signal_line
+            'signal_line':signal_line,
+            'histograms':histograms
         }
     
     @staticmethod
