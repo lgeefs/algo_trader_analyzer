@@ -1,5 +1,6 @@
 import math
 import requests
+import numpy as np
 
 class Technical(object):
 
@@ -96,6 +97,20 @@ class Technical(object):
         result = result / period
         result = math.sqrt(result)
         return result
+
+    # standard deviation uses squares to retain positive values
+    # mean deviation uses absolute values to retain positive values
+    @staticmethod
+    def get_mean_deviation(prices):
+        period = len(prices)
+        mean = sum(prices) / period
+        result = 0.00
+        for p in prices:
+            x = abs(p - mean)
+            result += x
+        result = result / period
+        result = math.sqrt(result)
+        return result
     
     @staticmethod
     def get_bollinger_bands(prices):
@@ -167,9 +182,45 @@ class Technical(object):
             'prices':prices[-len(rsi_array):]
         }
 
-                
+    # make sure to pass in full prices response, not just the closing prices!
+    @staticmethod
+    def get_cci(prices_resp):
+        highs = np.array([p['high'] for p in prices_resp])
+        lows = np.array([p['low'] for p in prices_resp])
+        closes = np.array([p['close'] for p in prices_resp])
+        
+        typical_prices = (highs + lows + closes) / 3
 
- 
+        #print(typical_prices)
+
+        sma_period = 20 # standard
+        ccis = []
+
+        for i in range(0, len(typical_prices) - sma_period):
+            price_slices = typical_prices[i:sma_period+i]
+            sma = Technical.get_sma(price_slices)
+            mean_deviation = Technical.get_mean_deviation(price_slices)
+            cci = (typical_prices[i+sma_period] - sma) / (0.015 * mean_deviation)
+            ccis.append(cci)
+        
+        return {
+            'ccis':ccis
+        }
 
 
+    @staticmethod         
+    def get_adx(prices):
+        print(prices)
+
+    @staticmethod         
+    def get_ad(prices):
+        print(prices)
+
+    @staticmethod         
+    def get_aroon(prices):
+        print(prices)
+
+    @staticmethod         
+    def get_obv(prices):
+        print(prices)
 

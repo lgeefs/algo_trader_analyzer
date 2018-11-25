@@ -98,3 +98,27 @@ class Charter(object):
         plt.savefig(symbol+' rsi.png')
 
         plt.show()
+
+    def plot_cci(self, symbol, range):
+        
+        prices_resp = Technical.get_historical_prices(symbol)[-range:]
+        # we want to pass the whole prices response (we need high+low for cci calc)
+        # prices = [p['close'] for p in prices_resp]
+
+        cci_resp = Technical.get_cci(prices_resp)
+        
+        ccis = np.array(cci_resp['ccis'])
+
+        x = np.arange(0, len(ccis))
+        plt.plot(x, ccis, label='cci')
+        
+        plt.xlabel('last '+str(range)+' days')
+        plt.ylabel('%')
+
+        plt.title("Plot of "+symbol)
+
+        plt.legend()
+
+        plt.savefig(symbol+' cci.png')
+
+        plt.show()

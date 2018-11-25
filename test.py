@@ -18,4 +18,6 @@ std_dev = Technical.get_standard_deviation(prices)
 bbands = Technical.get_bollinger_bands(prices)
 rsi = Technical.get_rsi(prices)
 
-print(rsi)
+prices = Technical.get_historical_prices('aapl')
+
+print(Technical.get_cci(prices))
