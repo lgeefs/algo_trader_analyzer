@@ -18,15 +18,7 @@ class Technical(object):
     # get simple moving average
     @staticmethod
     def get_sma(prices):
-        period = len(prices)
-        total = 0.0
-        i = 0
-        for p in prices:
-            if i == period: break
-            total += p
-            i += 1
-        #return total / len(prices)
-        return total / period
+        return sum(prices) / len(prices)
 
     # get exponential moving average
     @staticmethod
@@ -42,6 +34,24 @@ class Technical(object):
             #emas.append(ema)
 
         return ema
+
+    @staticmethod
+    def get_smas(prices, period):
+        smas = []
+        for i in range(0, len(prices) - period):
+            smas.append(Technical.get_sma(prices[i:i+period]))
+        return {
+            'smas':smas
+        }
+
+    @staticmethod
+    def get_emas(prices, period):
+        emas = []
+        for i in range(0, len(prices) - period):
+            emas.append(Technical.get_ema(prices[i:i+period]))
+        return {
+            'emas':emas
+        }
 
     # get moving average convergence/divergence oscillator
     @staticmethod

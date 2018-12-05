@@ -2,6 +2,26 @@ import sys
 import os
 from Technical import Technical
 from Analyzer import Analyzer
+from Charter import Charter
+
+symbol = 'aapl'
+
+c = Charter()
+
+prices = Technical.get_historical_prices(symbol)[-500:]
+
+cross_low_bb = Analyzer.cross_lower_bb(prices)
+cross_up_bb = Analyzer.cross_upper_bb(prices)
+
+print(cross_low_bb)
+print(cross_up_bb)
+c.plot(cross_low_bb*100)
+c.plot(cross_up_bb*100)
+c.plot([p['close'] for p in prices[20:]])
+c.show()
+
+
+'''
 
 prices = [
     10.63, 11.42, 11.11, 11.23, 11.44, 10.99, 12.45, 12.39, 11.90, 11.80,
@@ -20,4 +40,16 @@ rsi = Technical.get_rsi(prices)
 
 prices = Technical.get_historical_prices('aapl')
 
-print(Technical.get_adx(prices))
+n = 100
+c = Charter()
+c.plot_sma('aapl', n, 12)
+c.plot_sma('aapl', n, 26)
+c.plot_sma('aapl', n, 50)
+c.plot_sma('aapl', n, 100)
+c.plot_sma('aapl', n, 200)
+c.plot_bollinger_bands('aapl', n)
+
+c.show()
+
+#print(Technical.get_adx(prices))
+'''

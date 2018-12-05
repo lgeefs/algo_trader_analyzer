@@ -1,8 +1,51 @@
+from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 from Technical import Technical
 
 class Charter(object):
+
+    def show(self):
+        plt.legend()
+        plt.savefig('images/'+str(datetime.now())+'.png')
+        plt.show()
+
+    def plot(self, values):
+        values = np.array(values)
+        x = np.arange(0, len(values))
+        plt.plot(x, values)
+
+    def plot_sma(self, symbol, range, period):
+        prices_resp = Technical.get_historical_prices(symbol)[-range:]
+        prices = [p['close'] for p in prices_resp]
+
+        smas = np.array(Technical.get_smas(prices, period)['smas'])
+
+        x = np.arange(0, len(smas))
+        #plt.plot(x, fasts, label='fast ema')
+        #plt.plot(x, slows, label='slow ema')
+        plt.plot(x, smas, label='sma'+str(period))
+
+        plt.xlabel('last '+str(range)+' days')
+        plt.ylabel('price')
+
+        plt.title("Plot of "+symbol)
+
+    def plot_ema(self, symbol, range, period):
+        prices_resp = Technical.get_historical_prices(symbol)[-range:]
+        prices = [p['close'] for p in prices_resp]
+
+        emas = np.array(Technical.get_emas(prices, period)['emas'])
+
+        x = np.arange(0, len(emas))
+        #plt.plot(x, fasts, label='fast ema')
+        #plt.plot(x, slows, label='slow ema')
+        plt.plot(x, emas, label='ema'+period)
+
+        plt.xlabel('last '+str(range)+' days')
+        plt.ylabel('price')
+
+        plt.title("Plot of "+str(symbol))
 
     def plot_macd(self, symbol, range):
         prices_resp = Technical.get_historical_prices(symbol)[-range:]
@@ -35,12 +78,6 @@ class Charter(object):
 
         plt.title("Plot of "+symbol)
 
-        plt.legend()
-
-        plt.savefig(symbol+' macd.png')
-
-        plt.show()
-
     def plot_bollinger_bands(self, symbol, range):
         prices_resp = Technical.get_historical_prices(symbol)[-range:]
         prices = [p['close'] for p in prices_resp]
@@ -68,12 +105,6 @@ class Charter(object):
 
         plt.title("Plot of "+symbol)
 
-        plt.legend()
-
-        plt.savefig(symbol+' bbands.png')
-
-        plt.show()
-
     def plot_rsi(self, symbol, range):
         
         prices_resp = Technical.get_historical_prices(symbol)[-range:]
@@ -93,12 +124,6 @@ class Charter(object):
 
         plt.title("Plot of "+symbol)
 
-        plt.legend()
-
-        plt.savefig(symbol+' rsi.png')
-
-        plt.show()
-
     def plot_cci(self, symbol, range):
         
         prices_resp = Technical.get_historical_prices(symbol)[-range:]
@@ -117,8 +142,3 @@ class Charter(object):
 
         plt.title("Plot of "+symbol)
 
-        plt.legend()
-
-        plt.savefig(symbol+' cci.png')
-
-        plt.show()
