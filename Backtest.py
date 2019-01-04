@@ -2,6 +2,7 @@ import datetime as datetime
 from Account import Account
 from Technical import Technical
 from Analyzer import Analyzer
+import os
 
 class Backtest(object):
 
@@ -16,6 +17,14 @@ class Backtest(object):
         result = method_to_use(prices)
 
         self.backtest(symbol, result, prices, method_to_use.__name__)
+
+    def strat(self, prices):
+
+        result = []
+
+        
+
+        return result
 
     def bb_strat(self, prices):
         upper_results = Analyzer.cross_upper_bb(prices)
@@ -60,16 +69,19 @@ class Backtest(object):
         }
 
         d = datetime.date.today()
+        # get abs path of directory by splitting abspath (directory | filename.ext)
+        directory, _ = os.path.split(os.path.abspath(__file__))
 
-        f = open('backtests/backtest_log.csv','a+')
+        f = open(directory+'/backtests/logs/backtest_log.csv','a+')
         f.write(symbol+',')
         f.write(str(strategy)+',')
+        f.write(str(len(closes))+',')
         f.write(str(d)+',')
         f.write(str(self._account._balance)+',')
         f.write(str(self._account._quantity)+'\n')
         f.close()
 
-        e = open('backtests/'+symbol+'_backtest_log.csv','a+')
+        e = open(directory+'/backtests/logs/'+symbol+'_backtest_log.csv','a+')
         '''
         e.write(symbol+',')
         e.write(str(strategy)+',')
@@ -80,5 +92,14 @@ class Backtest(object):
         for b in self._account._balances:
             e.write(str(b)+'\n')
         e.close()
+
+        g = open(directory+'/backtests/results/'+symbol+'_backtest_result.csv', 'a+')
+        g.write(symbol+',')
+        g.write(str(strategy)+',')
+        g.write(str(len(closes))+',')
+        g.write(str(d)+',')
+        g.write(str(self._account._balance)+',')
+        g.write(str(self._account._quantity)+'\n')
+        g.close()
 
         return result

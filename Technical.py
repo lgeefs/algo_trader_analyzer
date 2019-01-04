@@ -9,6 +9,11 @@ class Technical(object):
         res = requests.get("http://127.0.0.1/algo_trader/api/get/historical_prices?symbol="+symbol+"&range=5y")
         return res.json()
 
+    @staticmethod
+    def get_prices(symbol, range):
+        res = requests.get("http://127.0.0.1/algo_trader/api/get/historical_prices?symbol="+symbol+"&date="+range)
+        return res.json()
+
     # get % price change between 2 prices
     @staticmethod
     def get_price_change(close, prev_close):

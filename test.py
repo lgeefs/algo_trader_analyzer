@@ -4,22 +4,43 @@ from Technical import Technical
 from Analyzer import Analyzer
 from Charter import Charter
 
+print('starting test...')
+
 symbol = 'aapl'
+range = 20
 
-c = Charter()
+y = 2018
+i = 0
 
-prices = Technical.get_historical_prices(symbol)[-500:]
+prices = []
 
-cross_low_bb = Analyzer.cross_lower_bb(prices)
-cross_up_bb = Analyzer.cross_upper_bb(prices)
+while y < 2019:
+    m = 10
+    while m < 13:
+        d = 1
+        while d < 32:
+            mon = m
+            day = d
+            if m < 10:
+                mon = '0'+str(m)
+            if d < 10:
+                day = '0'+str(d)
+            p = Technical.get_prices(symbol, str(y)+str(mon)+str(day))
+            if len(p) > 0:
+                prices.append(p)
+            d+=1
+        m+=1
+    if i == 0:
+        break
+    i+=1
+    y+=1
 
-print(cross_low_bb)
-print(cross_up_bb)
-c.plot(cross_low_bb*100)
-c.plot(cross_up_bb*100)
-c.plot([p['close'] for p in prices[20:]])
-c.show()
+for p in prices:
+    print(p['date'])
 
+
+
+print('finished test!')
 
 '''
 

@@ -15,6 +15,19 @@ class Charter(object):
         x = np.arange(0, len(values))
         plt.plot(x, values)
 
+    def plot_vwap(self, symbol, range):
+        prices_resp = Technical.get_historical_prices(symbol)[-range:]
+        vwaps = [p['vwap'] for p in prices_resp]
+        
+        x = np.arange(0, len(vwaps))
+        plt.plot(x, vwaps, label='vwap')
+
+        plt.xlabel('last '+str(range)+' days')
+        plt.ylabel('price')
+
+        plt.title("Plot of "+symbol)
+
+
     def plot_sma(self, symbol, range, period):
         prices_resp = Technical.get_historical_prices(symbol)[-range:]
         prices = [p['close'] for p in prices_resp]

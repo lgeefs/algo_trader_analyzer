@@ -24,5 +24,6 @@ class Analyzer(object):
     def cross_macd(prices):
         prices = np.array([p['close'] for p in prices])
         macds = [p['macd'] for p in Technical.get_bollinger_bands(prices)]
+        print(macds)
 
 

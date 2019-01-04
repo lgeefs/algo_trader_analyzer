@@ -1,3 +1,5 @@
+#!/Library/Frameworks/Python.framework/Versions/3.5/bin/python3
+
 from Technical import Technical
 from Analyzer import Analyzer
 from Backtest import Backtest
@@ -17,7 +19,7 @@ symbols = [
     'spy'
 ]
 
-n = 1000
+n = 200
 
 strategy = 'bb_strat'
 
