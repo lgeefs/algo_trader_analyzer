@@ -2,6 +2,47 @@ import sys
 import os
 from Technical import Technical
 from Analyzer import Analyzer
+from Charter import Charter
+
+print('starting test...')
+
+symbol = 'aapl'
+range = 20
+
+y = 2018
+i = 0
+
+prices = []
+
+while y < 2019:
+    m = 10
+    while m < 13:
+        d = 1
+        while d < 32:
+            mon = m
+            day = d
+            if m < 10:
+                mon = '0'+str(m)
+            if d < 10:
+                day = '0'+str(d)
+            p = Technical.get_prices(symbol, str(y)+str(mon)+str(day))
+            if len(p) > 0:
+                prices.append(p)
+            d+=1
+        m+=1
+    if i == 0:
+        break
+    i+=1
+    y+=1
+
+for p in prices:
+    print(p['date'])
+
+
+
+print('finished test!')
+
+'''
 
 prices = [
     10.63, 11.42, 11.11, 11.23, 11.44, 10.99, 12.45, 12.39, 11.90, 11.80,
@@ -18,4 +59,18 @@ std_dev = Technical.get_standard_deviation(prices)
 bbands = Technical.get_bollinger_bands(prices)
 rsi = Technical.get_rsi(prices)
 
-print(rsi)
+prices = Technical.get_historical_prices('aapl')
+
+n = 100
+c = Charter()
+c.plot_sma('aapl', n, 12)
+c.plot_sma('aapl', n, 26)
+c.plot_sma('aapl', n, 50)
+c.plot_sma('aapl', n, 100)
+c.plot_sma('aapl', n, 200)
+c.plot_bollinger_bands('aapl', n)
+
+c.show()
+
+#print(Technical.get_adx(prices))
+'''
