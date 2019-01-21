@@ -21,7 +21,7 @@ class Account(object):
             if self._quantity > 0:
                 self.sell(symbol, self._quantity, price)
             elif self._quantity < 0:
-                self.buy(symbol, self._quantity, price)
+                self.buy(symbol, -self._quantity, price)
 
 
     
