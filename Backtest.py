@@ -3,10 +3,15 @@ from Account import Account
 from Technical import Technical
 from Analyzer import Analyzer
 import os
+import time
 
 class Backtest(object):
 
     def __init__(self, strategy, symbol, n):
+
+        print("Starting backtest for "+symbol+" using "+strategy)
+
+        self.start_time = time.time()
 
         self._account = Account()
 
@@ -68,6 +73,13 @@ class Backtest(object):
             'shares':self._account._quantity
         }
 
+        exec_time = time.time() - self.start_time
+        print(symbol+" backtest ("+str(strategy)+") took "+exec_time+" to execute")
+
+        ##################
+        ## write to csv ##
+        ##################
+
         d = datetime.date.today()
         # get abs path of directory by splitting abspath (directory | filename.ext)
         directory, _ = os.path.split(os.path.abspath(__file__))
@@ -78,7 +90,8 @@ class Backtest(object):
         f.write(str(len(closes))+',')
         f.write(str(d)+',')
         f.write(str(self._account._balance)+',')
-        f.write(str(self._account._quantity)+'\n')
+        f.write(str(self._account._quantity)+',')
+        f.write(str(len(indicators))+'\n')
         f.close()
 
         e = open(directory+'/backtests/logs/'+symbol+'_backtest_log.csv','a+')
@@ -99,7 +112,8 @@ class Backtest(object):
         g.write(str(len(closes))+',')
         g.write(str(d)+',')
         g.write(str(self._account._balance)+',')
-        g.write(str(self._account._quantity)+'\n')
+        g.write(str(self._account._quantity)+',')
+        g.write(str(len(indicators))+'\n')
         g.close()
 
         return result

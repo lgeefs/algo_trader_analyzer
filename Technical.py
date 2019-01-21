@@ -1,8 +1,17 @@
 import math
 import requests
 import numpy as np
+import csv
 
 class Technical(object):
+
+    @staticmethod
+    def get_all_symbols():
+        with open('symbols.csv', 'r') as symbols_csv:
+            symbols = []
+            for symbol in csv.reader(symbols_csv, delimiter='\n'):
+                symbols.append(''.join(symbol))
+            return symbols
 
     @staticmethod
     def get_historical_prices(symbol):

@@ -8,16 +8,8 @@ import time
 print('Starting...')
 time_start = time.time()
 
-symbols = [
-    'aapl',
-    'fb',
-    'nvda',
-    'tsla',
-    'amzn',
-    'nflx',
-    'goog',
-    'spy'
-]
+symbols = Technical.get_all_symbols()
+print(symbols)
 
 n = 200
 
